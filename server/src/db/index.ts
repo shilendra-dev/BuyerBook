@@ -1,7 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { config } from "@/config/index.js";
-// import * as schema from "@/db/schema.js"; // Uncomment when you add actual tables
 
 // Create connection pool for better performance
 const pool = new Pool({
@@ -13,5 +12,4 @@ const pool = new Pool({
 });
 
 // Initialize database connection with pool
-export const db = drizzle(pool);
-// When you add tables, change to: export const db = drizzle(pool, { schema });
+export const db = drizzle({client: pool});
