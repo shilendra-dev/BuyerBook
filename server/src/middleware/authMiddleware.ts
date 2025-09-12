@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { auth } from "../lib/auth";
-import { AuthenticatedRequest } from "../types/controllers/base.types";
+import { AuthenticatedRequest } from "../types/base.types";
 
 export const requireAuth = async (
   req: AuthenticatedRequest,

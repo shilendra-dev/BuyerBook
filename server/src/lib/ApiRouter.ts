@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express';
-import { ControllerFunction, AuthenticatedRequest } from '@/types/controllers/base.types.js';
+import { ControllerFunction, AuthenticatedRequest } from '@/types/base.types.js';
 import { protect } from '@/middleware/authMiddleware.js';
 
 class ApiRouter {

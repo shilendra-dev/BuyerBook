@@ -40,7 +40,7 @@
         "#ai/*": ["./src/lib/ai/*"]
       }
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/db/schema/auth-schema.ts"],
     "exclude": ["node_modules", "dist"]
   }
   
