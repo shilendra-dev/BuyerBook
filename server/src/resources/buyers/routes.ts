@@ -3,6 +3,7 @@ import { createBuyerAPI } from "./api/create-buyer.api";
 import { updateBuyerAPI } from "./api/update-buyer.api";
 import { getAllBuyersAPI } from "./api/get-all-buyers.api";
 import { getBuyerAPI } from "./api/get-buyer.api";
+import { deleteBuyerAPI } from "./api/delete-buyer.api";
 
 // Get all buyers (with pagination)
 createApi().get("/buyers").authSecure(getAllBuyersAPI);
@@ -15,3 +16,6 @@ createApi().put("/buyers/:id").authSecure(updateBuyerAPI);
 
 // Get buyer by Id
 createApi().get("/buyers/:id").authSecure(getBuyerAPI);
+
+// Delete buyer by Id
+createApi().delete("/buyers/:id").authSecure(deleteBuyerAPI);
