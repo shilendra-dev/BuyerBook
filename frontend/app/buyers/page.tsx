@@ -11,19 +11,10 @@ import {
 } from "@/ui/molecules/card";
 import { Input } from "@/ui/atoms/input";
 import { useState } from "react";
-import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { columns } from "@/components/features/buyers/Columns";
-import { Buyer } from "@/types";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/organisms/table";
+import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
+import { DataTable } from "@/components/features/buyers/DataTable";
 
 export default function BuyersPage() {
-    const [data, setData] = useState<Buyer[]>([]);
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
-    
   return (
     <div className="w-full h-full">
       <div className="flex flex-col m-20 mx-40 gap-6">
@@ -86,37 +77,9 @@ export default function BuyersPage() {
             <CardTitle>Buyer Leads</CardTitle>
             <CardDescription>Manage and track your buyer leads</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             <Input placeholder="Search buyer leads..." className="w-sm bg-background"/>
-            <Table className="mt-4 bg-background border rounded-lg">
-                <TableHeader>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <TableHead key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                </TableHead>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableHeader>
-                <TableBody>
-                    {table.getRowModel().rows.map(row => (
-                        <TableRow key={row.id}>
-                            {row.getVisibleCells().map(cell => (
-                                <TableCell key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </TableCell>   
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <DataTable/>
           </CardContent>
         </Card>
       </div>
