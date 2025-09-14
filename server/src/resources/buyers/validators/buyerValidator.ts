@@ -20,3 +20,7 @@ export const buyerSchema = z.object({
 
 // Type inference
 export type BuyerInput = z.infer<typeof buyerSchema>;
+
+// Update buyer validator
+export const updateBuyerSchema = buyerSchema.partial()
+export type BuyerUpdateInput = z.infer<typeof updateBuyerSchema>; //infer type

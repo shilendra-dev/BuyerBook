@@ -3,7 +3,7 @@ import { ControllerFunction } from "@/types/base.types";
 import { buyerSchema } from "../validators/buyerValidator";
 import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
-import { fetchBuyer } from "../queries/fetchBuyer";
+import { fetchBuyerByPhone } from "../queries/fetchBuyerByPhone";
 import { addBuyer } from "../queries/addBuyer";
 import { z } from "zod";
 
@@ -23,8 +23,10 @@ export const createBuyerAPI: ControllerFunction =  async (
         }
         const ownerId = req.user.id;
 
-        // Check if buyer already exists
-        const existingBuyer = await fetchBuyer(ownerId);
+        // Check if buyer already exists using phone number
+        const phone = validatedData.phone;
+        
+        const existingBuyer = await fetchBuyerByPhone(phone);
         if (existingBuyer.length > 0) {
             return {
                 status: 400,
