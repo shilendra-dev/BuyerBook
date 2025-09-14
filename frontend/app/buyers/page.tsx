@@ -11,6 +11,7 @@ import {
 } from "@/ui/molecules/card";
 import { Input } from "@/ui/atoms/input";
 import { DataTable } from "@/components/features/buyers/DataTable";
+import { BuyerFilters } from "@/components/features/buyers/BuyerFilters";
 import { useRouter } from "next/navigation";
 import { useBuyerStore } from "@/lib/store/buyerStore";
 import { useEffect } from "react";
@@ -97,17 +98,31 @@ export default function BuyersPage() {
           </Card>
         </div>
 
+        {/* Filters */}
+        <BuyerFilters />
+
         {/* Table */}
         <Card className="flex-1">
           <CardHeader>
-            <CardTitle>Buyer Leads</CardTitle>
-            <CardDescription>Manage and track your buyer leads</CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle>Buyer Leads</CardTitle>
+                <CardDescription>
+                  View and manage all your buyer leads in one place
+                </CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Search buyers..."
+                  className="w-64"
+                  onChange={(e) =>
+                    useBuyerStore.getState().setSearchQuery(e.target.value)
+                  }
+                />
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Input
-              placeholder="Search buyer leads..."
-              className="w-sm bg-background"
-            />
             {isFetching ? (
               <p>Loading...</p>
             ) : (
