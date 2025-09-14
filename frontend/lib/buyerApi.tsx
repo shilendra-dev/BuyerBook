@@ -92,10 +92,10 @@ export type BuyersList = z.infer<typeof buyersListSchema>;
 // API FUNCTIONS
 // ----------------------
 const buyerApi = {
-  // Fetch all buyers with pagination
-  getAllBuyers: async (): Promise<BuyersList> => {
+  // Fetch all buyers with pagination and filters
+  getAllBuyers: async (params?: Record<string, any>): Promise<BuyersList> => {
     try {
-      const response = await api.get("/buyers");
+      const response = await api.get("/buyers", { params });
       const validated = buyersListSchema.parse(response.data.data);
       return validated;
     } catch (error) {

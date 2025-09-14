@@ -12,26 +12,14 @@ import {
 import { Input } from "@/ui/atoms/input";
 import { DataTable } from "@/components/features/buyers/DataTable";
 import { useRouter } from "next/navigation";
-import { buyerApi } from "@/lib/buyerApi";
-import { Buyer } from "@/types/buyerType";
-import { useEffect, useState } from "react";
+import { useBuyerStore } from "@/lib/store/buyerStore";
+import { useEffect } from "react";
 
 export default function BuyersPage() {
   const router = useRouter();
-  const [buyers, setBuyers] = useState<Buyer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { buyers, isFetching, fetchBuyers } = useBuyerStore();
 
   useEffect(() => {
-    async function fetchBuyers() {
-      try {
-        const res = await buyerApi.getAllBuyers();
-        setBuyers(res.buyers); // because API returns { buyers, pagination }
-      } catch (error) {
-        console.error("Failed to fetch buyers:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchBuyers();
   }, []);
 
@@ -120,10 +108,10 @@ export default function BuyersPage() {
               placeholder="Search buyer leads..."
               className="w-sm bg-background"
             />
-            {loading ? (
+            {isFetching ? (
               <p>Loading...</p>
             ) : (
-              <DataTable data={buyers} />
+              <DataTable />
             )}
           </CardContent>
         </Card>
