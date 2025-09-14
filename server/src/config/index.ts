@@ -66,7 +66,7 @@ const parseEnv = () => {
                 cors: {
                     origin: getEnvValue(
                         {
-                            development: ['http://localhost:4000', 'http://localhost:5173'] as string[] | boolean,
+                            development: ['http://localhost:3000', 'http://localhost:5173'] as string[] | boolean,
                             test: false as string[] | boolean,
                             production: ['https://noteit-snowy.vercel.app'] as string[] | boolean, //we can change this later
                         },

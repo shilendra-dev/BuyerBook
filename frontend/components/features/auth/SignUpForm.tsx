@@ -4,13 +4,46 @@ import { useState } from "react";
 import { Button } from "@/ui/atoms/button";
 import { Input } from "@/ui/atoms/input";
 import Link from "next/link";
+import { signUp } from "@/lib/auth-client";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { data, error } = await signUp.email({
+        email,
+        password,
+        name,
+      });
+
+      if(data){
+        toast.success("Signed up successfully!");
+        router.push("/signin");
+      }
+
+      if (error) {
+        setError(error.message || "Invalid email or password");
+        toast.error(error.message || "Invalid email or password");
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      setError("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
+    }
+  };
 
   // Main signup form
   return (
@@ -26,23 +59,23 @@ export function SignUpForm() {
       </div>
 
       {/* Form */}
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-4">
           <Input
             type="name"
             placeholder="Full Name"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
             disabled={isLoading}
-            autoComplete="email"
+            autoComplete="name"
             className="h-12 bg-background border-border/50 focus:border-primary/50 transition-colors"
           />
           <Input
             type="email"
             placeholder="Email address"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             disabled={isLoading}
             autoComplete="email"
