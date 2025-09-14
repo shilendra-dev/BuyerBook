@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans">
+      <body className="font-mono">
         <AuthProvider>
           <ClientToaster />
           {children}

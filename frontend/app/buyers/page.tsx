@@ -10,11 +10,12 @@ import {
   CardTitle,
 } from "@/ui/molecules/card";
 import { Input } from "@/ui/atoms/input";
-import { useState } from "react";
-import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import { DataTable } from "@/components/features/buyers/DataTable";
+import { useRouter } from "next/navigation";
 
 export default function BuyersPage() {
+  const router = useRouter();
+  
   return (
     <div className="w-full h-full">
       <div className="flex flex-col m-20 mx-40 gap-6">
@@ -26,7 +27,10 @@ export default function BuyersPage() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="default">
+            <Button
+              variant="default"
+              onClick={() => router.push("/buyers/new")}
+            >
               <Plus /> Add Buyer
             </Button>
             <Button variant="outline">
@@ -78,8 +82,11 @@ export default function BuyersPage() {
             <CardDescription>Manage and track your buyer leads</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Input placeholder="Search buyer leads..." className="w-sm bg-background"/>
-            <DataTable/>
+            <Input
+              placeholder="Search buyer leads..."
+              className="w-sm bg-background"
+            />
+            <DataTable />
           </CardContent>
         </Card>
       </div>

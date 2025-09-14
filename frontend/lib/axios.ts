@@ -1,7 +1,8 @@
 import axios from "axios";
 import { signOut } from "./auth-client";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001/api";
+console.log(API_URL);
 
 // Create axios instance
 export const api = axios.create({
