@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "module": "ESNext",
+      "lib": ["ES2022"],
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "allowJs": false,
+      "types": ["node"],
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"],
+        "@/resources/*": ["./src/resources/*"],
+        "@/lib/*": ["./src/lib/*"],
+        "@/utils/*": ["./src/utils/*"],
+        "@/types/*": ["./src/types/*"],
+        "#auth/*": ["./src/lib/auth/*"],
+        "#response/*": ["./src/lib/response/*"],
+        "#logging/*": ["./src/lib/logging/*"],
+        "#database/*": ["./src/lib/database/*"],
+        "#storage/*": ["./src/lib/storage/*"],
+        "#queue/*": ["./src/lib/queue/*"],
+        "#mail/*": ["./src/lib/mail/*"],
+        "#mail": ["./src/lib/mail/index.js"],
+        "#errors": ["./src/lib/errors.ts"],
+        "#ai/*": ["./src/lib/ai/*"]
+      }
+    },
+    "include": ["src/**/*", "src/db/schema/auth-schema.ts"],
+    "exclude": ["node_modules", "dist"]
+  }
+  
