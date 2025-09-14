@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -10,12 +12,17 @@ import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-tabl
 import { columns } from "./Columns";
 import { Buyer } from "@/types";
 
-export const DataTable = () => {
+interface DataTableProps {
+  data: Buyer[];
+}
+
+export const DataTable = ({ data }: DataTableProps) => {
     const table = useReactTable({
-        data: [],
+        data,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
+    
     return (
         <div className="overflow-hidden rounded-lg bg-background border">
           <Table>
