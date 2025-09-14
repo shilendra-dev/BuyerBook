@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClientToaster } from "@/ui/organisms/ClientToaster";
 import { AuthProvider } from "@/provider/auth-provider";
 
+
 export const metadata: Metadata = {
   title: "BuyerBook",
   description: "Buyer Lead Management System",
@@ -15,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="font-sans">
         <AuthProvider>
           <ClientToaster />
           {children}
