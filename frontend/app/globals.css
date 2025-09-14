@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -6,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: Inter;
+  --font-sans: "Poppins", sans-serif;
   --font-mono: monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -69,6 +70,7 @@
 }
 
 :root {
+  --font-inter: var(--font-inter);
   --radius: 0.5rem;
   --background: oklch(1.0000 0 0);
   --foreground: oklch(0.1408 0.0044 285.8229);
@@ -102,9 +104,6 @@
   --sidebar-border: oklch(0.9197 0.0040 286.3202);
   --sidebar-ring: oklch(0.2103 0.0059 285.8852);
   --destructive-foreground: oklch(0.9851 0 0);
-  --font-sans: Inter;
-  --font-serif: serif;
-  --font-mono: monospace;
   --shadow-color: #000000;
   --shadow-opacity: 0.05;
   --shadow-blur: 12px;
@@ -158,7 +157,7 @@
   --sidebar-ring: oklch(0.9851 0 0);
   --destructive-foreground: oklch(0.9851 0 0);
   --radius: 0.5rem;
-  --font-sans: Inter;
+  --font-sans: "Poppins", sans-serif;
   --font-serif: serif;
   --font-mono: monospace;
   --shadow-color: #000000;
