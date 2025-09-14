@@ -2,20 +2,20 @@ import { AuthenticatedRequest } from "@/types/base.types";
 import { ControllerFunction } from "@/types/base.types";
 import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
-import { fetchBuyerById } from "../queries/fetchBuyerById";
+import { deleteBuyer } from "../queries/deleteBuyer";
 import { handleApiError } from "@/utils/errorHandler";
 
-export const getBuyerAPI: ControllerFunction = async (
+export const deleteBuyerAPI: ControllerFunction = async (
   req: AuthenticatedRequest,
   _res: Response
 ): Promise<ApiResponse> => {
   try {
     const buyerId = req.params.id;
-    const result = await fetchBuyerById(buyerId);
+    const result = await deleteBuyer(buyerId);
 
     return {
       status: 200,
-      message: "Buyer retrieved successfully",
+      message: "Buyer deleted successfully",
       data: result,
       type: "success",
     };

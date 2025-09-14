@@ -3,6 +3,7 @@ import { ControllerFunction } from "@/types/base.types";
 import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
 import { getAllBuyers } from "../queries/getAllBuyers";
+import { handleApiError } from "@/utils/errorHandler";
 
 export const getAllBuyersAPI: ControllerFunction = async (
   req: AuthenticatedRequest,
@@ -42,11 +43,6 @@ export const getAllBuyersAPI: ControllerFunction = async (
       type: "success",
     };
   } catch (error) {
-    console.error(error);
-    return {
-      status: 500,
-      message: "Internal server error",
-      type: "error",
-    };
+    return handleApiError(error);
   }
 };

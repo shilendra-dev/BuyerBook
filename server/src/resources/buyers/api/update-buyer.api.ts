@@ -3,14 +3,10 @@ import { ControllerFunction } from "@/types/base.types";
 import { updateBuyerSchema } from "../validators/buyerValidator";
 import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
-import { z } from "zod";
 import { fetchBuyerById } from "../queries/fetchBuyerById";
 import { getUser } from "../queries/getUserRole";
-import {
-  updateBuyer,
-  ConcurrencyError,
-  BuyerNotFoundError,
-} from "../queries/updateBuyer";
+import { updateBuyer } from "../queries/updateBuyer";
+import { handleApiError } from "@/utils/errorHandler";
 
 export const updateBuyerAPI: ControllerFunction = async (
   req: AuthenticatedRequest,
@@ -80,32 +76,6 @@ export const updateBuyerAPI: ControllerFunction = async (
       type: "success",
     };
   } catch (error) {
-    console.error(error);
-    if (error instanceof z.ZodError) {
-      return {
-        status: 400,
-        message: "Validation error",
-        type: "error",
-      };
-    }
-    if (error instanceof ConcurrencyError) {
-      return {
-        status: 409,
-        message: error.message,
-        type: "error",
-      };
-    }
-    if (error instanceof BuyerNotFoundError) {
-      return {
-        status: 404,
-        message: error.message,
-        type: "error",
-      };
-    }
-    return {
-      status: 500,
-      message: "Internal server error",
-      type: "error",
-    };
+    return handleApiError(error);
   }
 };

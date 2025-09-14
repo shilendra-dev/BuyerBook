@@ -4,21 +4,7 @@ import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { BuyerUpdateInput } from "../validators/buyerValidator";
 import { fetchBuyerById } from "./fetchBuyerById";
-
-// Custom error classes
-export class ConcurrencyError extends Error {
-  constructor(message: string = "Record was modified by another user") {
-    super(message);
-    this.name = "ConcurrencyError";
-  }
-}
-
-export class BuyerNotFoundError extends Error {
-  constructor(buyerId: string) {
-    super(`Buyer with id ${buyerId} not found`);
-    this.name = "BuyerNotFoundError";
-  }
-}
+import { BuyerNotFoundError, ConcurrencyError } from "../errors/buyerErrors";
 
 // Type for the diff structure
 type FieldDiff = {

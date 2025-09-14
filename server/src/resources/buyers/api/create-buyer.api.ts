@@ -5,7 +5,7 @@ import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
 import { fetchBuyerByPhone } from "../queries/fetchBuyerByPhone";
 import { addBuyer } from "../queries/addBuyer";
-import { z } from "zod";
+import { handleApiError } from "@/utils/errorHandler";
 
 export const createBuyerAPI: ControllerFunction =  async (
     req: AuthenticatedRequest,
@@ -45,17 +45,6 @@ export const createBuyerAPI: ControllerFunction =  async (
             type: "success"
         }
     } catch (error) {
-        if(error instanceof z.ZodError){
-            return {
-                status: 400,
-                message: "Validation error",
-                type: "error"
-            }
-        }
-        return {
-            status: 500,
-            message: "Internal server error",
-            type: "error"
-        }
+        return handleApiError(error);
     }
 }
