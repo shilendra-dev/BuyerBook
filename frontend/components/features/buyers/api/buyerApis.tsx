@@ -1,24 +1,6 @@
 import { api } from "@/lib/axios";
 import { BuyerFormValues } from "@/components/features/buyers/BuyerForm";
-
-// Define the buyer data structure
-export interface Buyer {
-  id: string;
-  fullName: string;
-  email?: string;
-  phone: string;
-  city: string;
-  propertyType: string;
-  bhk?: string;
-  purpose: string;
-  budgetMin?: number;
-  budgetMax?: number;
-  timeline?: string;
-  source: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Buyer } from "@/schema/buyerSchema";
 
 // API functions
 export const buyerApi = {
@@ -86,6 +68,17 @@ export const buyerApi = {
       await api.delete(`/buyers/${id}`);
     } catch (error) {
       console.error(`Error deleting buyer with id ${id}:`, error);
+      throw error;
+    }
+  },
+
+  // Insert bulk buyers
+  insertBulkBuyers: async (buyersData: any): Promise<any> => {
+    try {
+      const response = await api.post("/buyers/bulk", buyersData);
+      return response.data;
+    } catch (error) {
+      console.error("Error inserting bulk buyers:", error);
       throw error;
     }
   },

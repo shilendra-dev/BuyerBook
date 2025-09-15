@@ -11,14 +11,15 @@ interface CsvImportOptions<T> {
 
 export function useCsvImport<T extends Record<string, any>>(options: CsvImportOptions<T>) {
     const [errors, setErrors] = useState<{ row: number; message: string }[]>([]);
+    const [ParsedData, setParsedData] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const validateRow = (row: any, index: number): { data: T | null; errors: string[] } => {
         const result = options.schema.safeParse(row);
 
-        if(result.success){
+        if (result.success) {
             return { data: result.data, errors: [] };
-        }else {
+        } else {
             const formattedErrors = result.error.issues.map(
                 issue => `${issue.path.join(".")}: ${issue.message}`
             );
@@ -43,7 +44,9 @@ export function useCsvImport<T extends Record<string, any>>(options: CsvImportOp
                         message: `Row ${index + 1}: ${message}`
                     });
                 });
-            } else if (data) {
+            }
+
+            if (data) {
                 validData.push(data);
             }
         });
@@ -51,8 +54,10 @@ export function useCsvImport<T extends Record<string, any>>(options: CsvImportOp
         if (validationErrors.length > 0) {
             setErrors(validationErrors);
             options.onError?.(validationErrors);
-        } else if (validData.length > 0) {
+        }
+        if (validData.length > 0) {
             options.onSuccess?.(validData);
+            setParsedData(validData);
         }
     };
 
@@ -79,6 +84,7 @@ export function useCsvImport<T extends Record<string, any>>(options: CsvImportOp
     return {
         handleFileUpload,
         errors,
-        isLoading
+        ParsedData,
+        isLoading,
     }
 }

@@ -8,6 +8,13 @@
       "when": 1757689735943,
       "tag": "0000_colorful_ultimates",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1757940029664,
+      "tag": "0001_medical_juggernaut",
+      "breakpoints": true
     }
   ]
 }
