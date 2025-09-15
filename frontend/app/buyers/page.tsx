@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/ui/atoms/button";
-import { CloudDownload, CloudUpload, Plus } from "lucide-react";
+import { CloudDownload, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
 import { Input } from "@/ui/atoms/input";
 import { DataTable } from "@/components/features/buyers/DataTable";
 import { BuyerFilters } from "@/components/features/buyers/BuyerFilters";
+import { ImportBuyersDialog } from "@/components/features/buyers/ImportBuyersDialog";
 import { useRouter } from "next/navigation";
 import { useBuyerStore } from "@/lib/store/buyerStore";
 import { useEffect } from "react";
@@ -29,7 +30,7 @@ export default function BuyersPage() {
       <div className="flex flex-col m-20 mx-30 gap-6">
         <div className="flex w-full justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">Buyer Leads</h1>
+            <h1 className="text-3xl font-semibold">Buyer Leads</h1> 
             <p className="text-muted-foreground">
               Manage and track your buyer leads
             </p>
@@ -41,9 +42,7 @@ export default function BuyersPage() {
             >
               <Plus /> Add Buyer
             </Button>
-            <Button variant="outline">
-              <CloudUpload /> Import
-            </Button>
+            <ImportBuyersDialog />
             <Button variant="outline">
               <CloudDownload /> Export
             </Button>
