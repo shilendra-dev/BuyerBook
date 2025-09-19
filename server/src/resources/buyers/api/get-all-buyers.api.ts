@@ -2,8 +2,11 @@ import { AuthenticatedRequest } from "@/types/base.types";
 import { ControllerFunction } from "@/types/base.types";
 import { Response } from "express";
 import { ApiResponse } from "@/types/base.types";
-import { getAllBuyers } from "../queries/getAllBuyers";
 import { handleApiError } from "@/utils/errorHandler";
+import { fetchAllBuyers } from "@/resources/export/queries/fetchAllBuyers";
+import { PaginationOptions } from "@/resources/export/queries/fetchAllBuyers";
+import { sortOptions } from "@/resources/export/queries/fetchAllBuyers";
+import { filterOptions } from "@/resources/export/queries/fetchAllBuyers";
 
 export const getAllBuyersAPI: ControllerFunction = async (
   req: AuthenticatedRequest,
@@ -11,9 +14,12 @@ export const getAllBuyersAPI: ControllerFunction = async (
 ): Promise<ApiResponse> => {
   try {
     // Extract pagination parameters from query string
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
 
+    const { paginationParams, sortParams, filterParams } = req.query as unknown as { paginationParams: PaginationOptions, sortParams: sortOptions, filterParams: filterOptions } ;
+
+    const page = parseInt(paginationParams.page);
+    const limit = parseInt(paginationParams.limit);
+    
     // Validate pagination parameters
     if (page < 1) {
       return {
@@ -31,14 +37,16 @@ export const getAllBuyersAPI: ControllerFunction = async (
       };
     }
 
-    const result = await getAllBuyers({ page, limit });
+    const testResult = await fetchAllBuyers(filterParams, paginationParams, sortParams);
+
+    // const result = await getAllBuyers({ page, limit }); DEPRICATED`
 
     return {
       status: 200,
       message: "Buyers retrieved successfully",
       data: {
-        buyers: result.data,
-        pagination: result.pagination,
+        buyers: testResult.data,
+        pagination: testResult.pagination,
       },
       type: "success",
     };

@@ -14,7 +14,7 @@ type FilterType = 'city' | 'propertyType' | 'status' | 'timeline';
 
 const filterOptions = {
   city: ["Chandigarh", "Mohali", "Zirakpur", "Panchkula", "Other"],
-  propertyType: ["Apartment", "Villa", "Plot", "Office", "Retail", "Warehouse", "Industrial", "Other"],
+  propertyType: ["Apartment", "Villa", "Plot", "Office", "Retail", "Other"],
   status: ["New", "Qualified", "Contacted", "Visited", "Negotiation", "Converted", "Dropped"],
   timeline: ["0-3m", "3-6m", ">6m", "Exploring"]
 } as const;

@@ -1,4 +1,4 @@
-export type PropertyType = "Apartment" | "Villa" | "Plot" | "Office" | "Retail" | "Warehouse" | "Industrial" | "Other";
+export type PropertyType = "Apartment" | "Villa" | "Plot" | "Office" | "Retail" | "Other";
 
 export type Purpose = "Buy" | "Rent";
 

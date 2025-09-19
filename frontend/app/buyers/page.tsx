@@ -16,6 +16,7 @@ import { ImportBuyersDialog } from "@/components/features/buyers/ImportBuyersDia
 import { useRouter } from "next/navigation";
 import { useBuyerStore } from "@/lib/store/buyerStore";
 import { useEffect } from "react";
+import { BuyerExportDialogue } from "@/components/features/buyers/export/BuyerExportDialogue";
 
 export default function BuyersPage() {
   const router = useRouter();
@@ -43,9 +44,7 @@ export default function BuyersPage() {
               <Plus /> Add Buyer
             </Button>
             <ImportBuyersDialog />
-            <Button variant="outline">
-              <CloudDownload /> Export
-            </Button>
+            <BuyerExportDialogue />
           </div>
         </div>
 

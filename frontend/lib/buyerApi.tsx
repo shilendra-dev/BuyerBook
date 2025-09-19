@@ -1,11 +1,7 @@
 import { z } from "zod";
 import api from "@/lib/axios";
 
-// ----------------------
-// SCHEMAS
-// ----------------------
-
-// Full Buyer schema matching API + DB
+// Full Buyer schema
 const buyerSchema = z.object({
   id: z.string(),
   fullName: z.string().min(1, "Full name is required"),
@@ -18,8 +14,6 @@ const buyerSchema = z.object({
     "Plot",
     "Office",
     "Retail",
-    "Warehouse",
-    "Industrial",
     "Other",
   ]),
   bhk: z.enum(["1", "2", "3", "4", "Studio"]).nullable().optional(),
@@ -95,6 +89,7 @@ const buyerApi = {
   // Fetch all buyers with pagination and filters
   getAllBuyers: async (params?: Record<string, any>): Promise<BuyersList> => {
     try {
+      console.log("Params: ", params)
       const response = await api.get("/buyers", { params });
       const validated = buyersListSchema.parse(response.data.data);
       return validated;
@@ -134,6 +129,17 @@ const buyerApi = {
   deleteBuyer: async (id: string): Promise<{ success: boolean }> => {
     await api.delete(`/buyers/${id}`);
     return { success: true };
+  },
+
+  //Export buyers
+  exportBuyers: async (params?: Record<string, any>): Promise<BuyersList> => {
+    try {
+      const response = await api.get("/export/buyers", { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error exporting buyers:", error);
+      throw error;
+    }
   },
 };
 

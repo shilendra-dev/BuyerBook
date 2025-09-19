@@ -46,6 +46,8 @@ interface BuyerState {
   ) => Promise<void>;
   updateBuyer: (id: string, buyerData: Partial<Buyer>) => Promise<void>;
   deleteBuyer: (id: string) => Promise<void>;
+  exportBuyers: () => Promise<void>;
+
 
   // Pagination actions
   setPage: (page: number) => void;
@@ -70,6 +72,7 @@ const initialState: Omit<
   | "createBuyer"
   | "updateBuyer"
   | "deleteBuyer"
+  | "exportBuyers"
   | "setPage"
   | "setPageSize"
   | "setSearchQuery"
@@ -100,20 +103,29 @@ export const useBuyerStore = create<BuyerState>((set, get) => ({
     try {
       set({ isFetching: true, error: null });
       const { page, pageSize, searchQuery, filters, sortBy, sortOrder } = get();
-  
+
       // Only send pagination + sorting to backend
+
       const params = {
-        page,
-        limit: pageSize,
-        sortBy,
-        sortOrder,
+        paginationParams: {
+          page,
+          limit: pageSize
+        },
+        sortParams: {
+          sortBy,
+          sortOrder
+        },
+        filterParams: {
+          ...filters,
+          searchQuery
+        }
       };
-  
+
       const response = await buyerApi.getAllBuyers(params);
-  
+
       // In-memory filtering
       let buyers = response.buyers;
-  
+
       if (searchQuery) {
         buyers = buyers.filter((b) =>
           b.fullName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -131,7 +143,7 @@ export const useBuyerStore = create<BuyerState>((set, get) => ({
       if (filters.timeline) {
         buyers = buyers.filter((b) => b.timeline === filters.timeline);
       }
-  
+
       set({
         buyers,
         totalItems: response.pagination.total, // backend total (unfiltered)
@@ -146,7 +158,7 @@ export const useBuyerStore = create<BuyerState>((set, get) => ({
     } finally {
       set({ isFetching: false });
     }
-  },  
+  },
 
   fetchBuyerById: async (id) => {
     try {
@@ -219,6 +231,25 @@ export const useBuyerStore = create<BuyerState>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  exportBuyers: async () => {
+    const { page, pageSize, searchQuery, filters, sortBy, sortOrder } = get();
+
+    // Only send pagination + sorting to backend
+
+    const params = {
+      sortParams: {
+        sortBy,
+        sortOrder
+      },
+      filterParams: {
+        ...filters,
+        searchQuery
+      }
+    };
+
+    const response = await buyerApi.exportBuyers(params);
   },
 
   // Pagination

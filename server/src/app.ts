@@ -5,9 +5,11 @@ import { routes } from './lib/ApiRouter';
 import './routes'; //this imports all the routes
 import { auth } from '@/lib/auth';
 import { toNodeHandler } from 'better-auth/node';
+import qs from 'qs';
 
 export const createApp = () => {
   const app = express();
+  app.set("query parser", (str: any) => qs.parse(str));
 
   // Setup middleware
   setupMiddleware(app);

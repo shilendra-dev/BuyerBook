@@ -15,6 +15,13 @@
       "when": 1757940029664,
       "tag": "0001_medical_juggernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758271808371,
+      "tag": "0002_real_greymalkin",
+      "breakpoints": true
     }
   ]
 }

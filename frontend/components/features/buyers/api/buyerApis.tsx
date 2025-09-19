@@ -82,4 +82,5 @@ export const buyerApi = {
       throw error;
     }
   },
+
 };
