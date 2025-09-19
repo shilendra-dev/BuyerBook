@@ -49,7 +49,6 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
         return updateExportResult;
     } catch (error) {
         await updateExportStatus(exportId, "failed");
-        console.log("helloooooooo lode")
         throw error;
     }
 }
