@@ -2,18 +2,25 @@ import { fetchAllBuyers, filterOptions, PaginationOptions, sortOptions } from ".
 import papa from "papaparse";
 import cloudinary from '@/utils/cloudinary';
 import fs from 'fs';
-import { insertExportUrl } from "../queries/insertExportUrl";
+import updateExportStatus from "../queries/updateExportStatus";
+import updateExportUrl from "../queries/updateExportUrl";
 
-export async function exportBuyers(filterParams: filterOptions, sortParams: sortOptions, userId: string) {
-
+export async function exportBuyers(filterParams: filterOptions, sortParams: sortOptions, exportId: string) {
     try {
+        //update status in db
+        await updateExportStatus(exportId, "in_progress");
+
         //fetch json data from db (100 only)
         const paginationParams = { //string because our query convers it to numbers
             page: "1",
             limit: "2",
         } as PaginationOptions;
 
+        console.log("chutiya");
+        
+
         const data = await fetchAllBuyers(filterParams, paginationParams, sortParams);
+        console.log(data);
 
 
         for(let i = 1; i <= data.pagination.totalPages; i++) {
@@ -37,11 +44,12 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
         fs.unlinkSync('buyers.csv'); //deletes the file after upload
 
         //saving secure url in db
-        const result = await insertExportUrl(secureUrl, userId);
+        const updateExportResult = await updateExportUrl(exportId, secureUrl);
 
-        return result;
+        return updateExportResult;
     } catch (error) {
-        fs.unlinkSync('buyers.csv'); //deletes the file after upload if error
+        await updateExportStatus(exportId, "failed");
+        console.log("helloooooooo lode")
         throw error;
     }
 }

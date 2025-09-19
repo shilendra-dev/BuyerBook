@@ -4,8 +4,8 @@ import { exportBuyers } from "@/resources/export/services/exportBuyerService";
 
 const processExportBuyersJob = async (job: any) => {
     console.log("Job data: ", job.data);
-    const { filterParams, sortParams, userId } = job.data;
-    const result = await exportBuyers(filterParams, sortParams, userId);
+    const { filterParams, sortParams, exportId } = job.data;
+    const result = await exportBuyers(filterParams, sortParams, exportId);
     console.log(result);
 }
 

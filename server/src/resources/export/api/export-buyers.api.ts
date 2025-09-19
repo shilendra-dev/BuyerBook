@@ -6,6 +6,7 @@ import { queue } from "@/utils/queue";
 import { Response } from "express";
 import { filterOptions } from "../queries/fetchAllBuyers";
 import { sortOptions } from "../queries/fetchAllBuyers";
+import initializeExportUrl from "../queries/initializeExportUrl";
 
 export const exportBuyersAPI: ControllerFunction = async (req: AuthenticatedRequest, _res: Response): Promise<ApiResponse> => {
     try {
@@ -19,11 +20,14 @@ export const exportBuyersAPI: ControllerFunction = async (req: AuthenticatedRequ
             }
         }
         const userId = req.user.id;
+        
+        const exportInsertResult = await initializeExportUrl(userId);
+        const exportId = exportInsertResult[0].exportId;
 
         const job = await queue.add("export-buyers", {
             filterParams,
             sortParams,
-            userId
+            exportId,
         })
         
         return {
@@ -31,6 +35,7 @@ export const exportBuyersAPI: ControllerFunction = async (req: AuthenticatedRequ
             message: "Job queued successfully",
             data: {
                 jobId: job.id,
+                exportId: exportId,
                 status: "pending",
             },
             type: "success",
