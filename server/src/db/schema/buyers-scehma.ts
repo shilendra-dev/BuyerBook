@@ -33,7 +33,7 @@ export const buyers = pgTable('buyers', {
     id: text('id').primaryKey(),
     fullName: varchar("full_name").notNull(),
     email: varchar('email'),
-    phone: text('phone').notNull().unique(),
+    phone: text('phone').notNull(),
     city: cityENUM('city').notNull(),
     propertyType: propertyTypeENUM('property_type').notNull(),
     bhk: bhkENUM('bhk'), //should be optional if non-residential

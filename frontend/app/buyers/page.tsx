@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/ui/atoms/button";
-import { CloudDownload, Plus } from "lucide-react";
+import { CloudDownload, Loader2, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,11 +16,20 @@ import { ImportBuyersDialog } from "@/components/features/buyers/ImportBuyersDia
 import { useRouter } from "next/navigation";
 import { useBuyerStore } from "@/lib/store/buyerStore";
 import { useEffect } from "react";
-import { BuyerExportDialogue } from "@/components/features/buyers/export/BuyerExportDialogue";
+import { buyerApi } from "@/lib/buyerApi";
 
 export default function BuyersPage() {
   const router = useRouter();
-  const { buyers, isFetching, fetchBuyers } = useBuyerStore();
+  const { buyers, isFetching, fetchBuyers, exportBuyers, handleExportPolling, isLoading } =
+    useBuyerStore();
+
+  const handleExportBuyers = async () => {
+    const result = await exportBuyers();
+    const exportId = result.data.exportId;
+    const resultWithUrl = await handleExportPolling(exportId);
+    const url = resultWithUrl.data.url;
+    window.open(url, "_blank");
+  };
 
   useEffect(() => {
     fetchBuyers();
@@ -31,7 +40,7 @@ export default function BuyersPage() {
       <div className="flex flex-col m-20 mx-30 gap-6">
         <div className="flex w-full justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">Buyer Leads</h1> 
+            <h1 className="text-3xl font-semibold">Buyer Leads</h1>
             <p className="text-muted-foreground">
               Manage and track your buyer leads
             </p>
@@ -44,7 +53,19 @@ export default function BuyersPage() {
               <Plus /> Add Buyer
             </Button>
             <ImportBuyersDialog />
-            <BuyerExportDialogue />
+            <Button
+              variant="outline"
+              onClick={() => {
+                handleExportBuyers();
+              }}
+            >
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <CloudDownload className="mr-2 h-4 w-4" />
+              )}
+              Export
+            </Button>
           </div>
         </div>
 
@@ -65,9 +86,7 @@ export default function BuyersPage() {
               <CardDescription>Total number of new buyer leads</CardDescription>
             </CardHeader>
             <CardContent className="text-xl font-semibold">
-              {
-                buyers.filter((b) => b.status === "New").length
-              }
+              {buyers.filter((b) => b.status === "New").length}
             </CardContent>
           </Card>
           <Card className="flex-1">
@@ -78,9 +97,7 @@ export default function BuyersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="text-xl font-semibold">
-              {
-                buyers.filter((b) => b.status === "Converted").length
-              }
+              {buyers.filter((b) => b.status === "Converted").length}
             </CardContent>
           </Card>
           <Card className="flex-1">
@@ -121,11 +138,7 @@ export default function BuyersPage() {
             </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            {isFetching ? (
-              <p>Loading...</p>
-            ) : (
-              <DataTable />
-            )}
+            {isFetching ? <p>Loading...</p> : <DataTable />}
           </CardContent>
         </Card>
       </div>

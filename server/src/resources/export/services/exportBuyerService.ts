@@ -1,9 +1,10 @@
 import { fetchAllBuyers, filterOptions, PaginationOptions, sortOptions } from "../queries/fetchAllBuyers";
 import papa from "papaparse";
 import cloudinary from '@/utils/cloudinary';
-import fs from 'fs';
+import fs, { appendFileSync } from 'fs';
 import updateExportStatus from "../queries/updateExportStatus";
 import updateExportUrl from "../queries/updateExportUrl";
+import os from 'os';
 
 export async function exportBuyers(filterParams: filterOptions, sortParams: sortOptions, exportId: string) {
     try {
@@ -16,15 +17,12 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
             limit: "2",
         } as PaginationOptions;
 
-        console.log("chutiya");
-        
-
         const data = await fetchAllBuyers(filterParams, paginationParams, sortParams);
-        console.log(data);
+        const keys = ["fullName", "email", "phone", "city", "propertyType", "bhk", "purpose", "budgetMin", "budgetMax", "timeline", "source", "status", "notes", "tags", "createdAt"];
+        appendFileSync('buyers.csv', keys.join(',') + os.EOL);
 
-
-        for(let i = 1; i <= data.pagination.totalPages; i++) {
-            const data = await fetchAllBuyers(filterParams, {page: i.toString(), limit: "2"}, sortParams);
+        for (let i = 1; i <= data.pagination.totalPages; i++) {
+            const data = await fetchAllBuyers(filterParams, { page: i.toString(), limit: "2" }, sortParams);
             const buyerData = data.data;
             buyerData.forEach((buyer) => {
                 delete buyer.id;
@@ -32,10 +30,9 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
                 buyer.createdAt = buyer.createdAt.toLocaleDateString();
                 buyer.updatedAt = buyer.updatedAt.toLocaleDateString();
             });
-
-            fs.appendFileSync('buyers.csv', papa.unparse(buyerData));
+            await json2csvParser(buyerData, 'buyers.csv', keys);
         }
-        
+
         const results = await cloudinary.uploader
             .upload('buyers.csv', { resource_type: "raw" })
 
@@ -51,4 +48,20 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
         await updateExportStatus(exportId, "failed");
         throw error;
     }
+}
+
+function formatValue(value: any): string {
+    if (Array.isArray(value)) {
+        return value.join(' | ');
+    }
+    if (typeof value === "string") {
+        return `"${value.replace(/"/g, '""')}"`;
+    }
+    return value ?? "";
+}
+
+async function json2csvParser(data: any, fileName: string, keys: string[]) {
+    data.forEach((buyer: any) => {
+        fs.appendFileSync(fileName, (keys.map((key) => formatValue(buyer[key])).join(',')) + os.EOL);
+    });
 }

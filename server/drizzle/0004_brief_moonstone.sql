@@ -1,0 +1,1 @@
+ALTER TABLE "buyers" DROP CONSTRAINT "buyers_phone_unique";

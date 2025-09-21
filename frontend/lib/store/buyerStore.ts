@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Buyer } from "@/types/buyerType";
 import { buyerApi } from "@/lib/buyerApi";
+import { set } from "zod";
 
 type Sort = { id: string; desc: boolean };
 
@@ -46,8 +47,8 @@ interface BuyerState {
   ) => Promise<void>;
   updateBuyer: (id: string, buyerData: Partial<Buyer>) => Promise<void>;
   deleteBuyer: (id: string) => Promise<void>;
-  exportBuyers: () => Promise<void>;
-
+  exportBuyers: () => Promise<any>;
+  handleExportPolling: (exportId: string) => Promise<any>;
 
   // Pagination actions
   setPage: (page: number) => void;
@@ -73,6 +74,7 @@ const initialState: Omit<
   | "updateBuyer"
   | "deleteBuyer"
   | "exportBuyers"
+  | "handleExportPolling"
   | "setPage"
   | "setPageSize"
   | "setSearchQuery"
@@ -234,22 +236,65 @@ export const useBuyerStore = create<BuyerState>((set, get) => ({
   },
 
   exportBuyers: async () => {
-    const { page, pageSize, searchQuery, filters, sortBy, sortOrder } = get();
+    try {
+      set({ isLoading: true, error: null });
+      const { page, pageSize, searchQuery, filters, sortBy, sortOrder } = get();
 
-    // Only send pagination + sorting to backend
+      // Only send pagination + sorting to backend
 
-    const params = {
-      sortParams: {
-        sortBy,
-        sortOrder
-      },
-      filterParams: {
-        ...filters,
-        searchQuery
+      const params = {
+        sortParams: {
+          sortBy,
+          sortOrder
+        },
+        filterParams: {
+          ...filters,
+          searchQuery
+        }
+      };
+
+      const result = await buyerApi.exportBuyers(params);
+      return result;
+
+    } catch (error) {
+      console.error("Failed to delete buyer:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to delete buyer";
+      set({ error: errorMessage });
+      throw new Error(errorMessage);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  handleExportPolling: async (exportId: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      const interval = 3000;
+      const timeout = 10000;
+      const startTime = Date.now();
+      let result;
+
+      while (true) {
+        result = await buyerApi.exportBuyersPolling(exportId);
+        console.log(result);
+        if (result.data.status === "completed" || result.data.status === "failed") {
+          break;
+        }
+        if (Date.now() - startTime > timeout) {
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, interval));
       }
-    };
-
-    const response = await buyerApi.exportBuyers(params);
+      return result;
+    } catch (error) {
+      console.error("Failed to poll export buyers:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to poll export buyers";
+      set({ error: errorMessage });
+      throw new Error(errorMessage);
+    } finally {
+      set({ isLoading: false });
+    }
   },
 
   // Pagination

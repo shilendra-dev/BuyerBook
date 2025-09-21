@@ -17,6 +17,7 @@ export const pollExportBuyersAPI: ControllerFunction = async (req: Authenticated
                 message: "Export completed",
                 type: "success",
                 data: {
+                    status: exportStatus.status,
                     url: exportStatus.url,
                 },
             }

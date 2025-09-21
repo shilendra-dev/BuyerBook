@@ -89,7 +89,6 @@ const buyerApi = {
   // Fetch all buyers with pagination and filters
   getAllBuyers: async (params?: Record<string, any>): Promise<BuyersList> => {
     try {
-      console.log("Params: ", params)
       const response = await api.get("/buyers", { params });
       const validated = buyersListSchema.parse(response.data.data);
       return validated;
@@ -132,12 +131,23 @@ const buyerApi = {
   },
 
   //Export buyers
-  exportBuyers: async (params?: Record<string, any>): Promise<BuyersList> => {
+  exportBuyers: async (params?: Record<string, any>): Promise<any> => {
     try {
       const response = await api.get("/export/buyers", { params });
       return response.data;
     } catch (error) {
       console.error("Error exporting buyers:", error);
+      throw error;
+    }
+  },
+
+  // Export Polling
+  exportBuyersPolling: async (exportId: string): Promise<any> => {
+    try {
+      const response = await api.get(`/export/${exportId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error polling export buyers:", error);
       throw error;
     }
   },
