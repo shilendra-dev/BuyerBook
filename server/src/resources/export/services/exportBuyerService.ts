@@ -1,5 +1,4 @@
 import { fetchAllBuyers, filterOptions, PaginationOptions, sortOptions } from "../queries/fetchAllBuyers";
-import papa from "papaparse";
 import cloudinary from '@/utils/cloudinary';
 import fs, { appendFileSync } from 'fs';
 import updateExportStatus from "../queries/updateExportStatus";
@@ -14,7 +13,7 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
         //fetch json data from db (100 only)
         const paginationParams = { //string because our query convers it to numbers
             page: "1",
-            limit: "2",
+            limit: "100",
         } as PaginationOptions;
 
         const data = await fetchAllBuyers(filterParams, paginationParams, sortParams);
@@ -22,7 +21,7 @@ export async function exportBuyers(filterParams: filterOptions, sortParams: sort
         appendFileSync('buyers.csv', keys.join(',') + os.EOL);
 
         for (let i = 1; i <= data.pagination.totalPages; i++) {
-            const data = await fetchAllBuyers(filterParams, { page: i.toString(), limit: "2" }, sortParams);
+            const data = await fetchAllBuyers(filterParams, { page: i.toString(), limit: "100" }, sortParams);
             const buyerData = data.data;
             buyerData.forEach((buyer) => {
                 delete buyer.id;
